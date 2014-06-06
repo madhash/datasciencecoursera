@@ -1,10 +1,14 @@
 import random
 from Tkinter import *
+from tkMessageBox import showinfo, showwarning, showerror
+from functools import partial as pto
 def bye(*args):
     root=Tk()
-    T = Text(root, height=4, width=50,background="yellow")
-    T.insert(END,"seee you later")
-    bt=Button(root,text="Quit",fg="yellow",command=quit)
+    T = Text(root, height=4, width=50,background="yellow",font=('Verdana', 25, 'bold', 'italic'))
+    T.insert(END,"seee you later good day dude")
+    
+    T.pack()
+    bt=Button(root,text="Quit",fg="red",command=quit)
     bt.pack()
     mainloop(  )
 def shift(text,shift):
@@ -166,7 +170,8 @@ def dit(text,key,iteration):
         return None
     return extracted
 
-def zombify():
+def zombify(*args):
+    root=Tk()
     try:
         choice='y'
         while choice=='y':
@@ -177,31 +182,39 @@ def zombify():
             key=raw_input("Password: ")
             while len(str(key))==1 or str(key)=="":
                 if str(key)=="":
-                    print "\n No password? You do want me to encrypt, right?\n"
+                    showerror(title="error my friend",message="please kindly enter your password (no cheatiing)")
                     key=raw_input("What's the password? : ")
                 elif len(str(key))==1:
-                    print "\n No, Seriously? Password of unit length? Try something better...\n"
+                    showwarning(title="warning my friend",message="your password must be atleast to character long")
                     key=raw_input("Choose a password: ")
             level=raw_input("Security level (1-5, for fast output): ")
+            z=0
             while str(level) not in "012345":
                 print "\n Enter a number ranging from 0-5\n"
                 level=raw_input("Security level (0-5): ")
+            if str(level)=="" and z==0:
+                showerror(title="error my friend",message="You must give the value of the security key (1-5)")
+                
+            print "\n Enter a number ranging from 0-5\n"
+            level=raw_input("Security level (0-5): ")
             if str(level)=="":
-                print "\n No input given. Choosing level 0\n"
+                showwarning(title="warning my friend",message="by default security key has been set to ZERO")
                 level=0
+                
             what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             while str(what)!="e" and str(what)!="d" and str(what)=="":
                 print "\n (sigh) You can choose something...\n"
                 what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             if str(what)=='e':
                 out=eit(str(text),str(key),int(level))
-                root = Tk()
+                
                 root.title('your encrpted text is')
                 S = Scrollbar(root)
-                T = Text(root, height=4, width=50,background="yellow")
-                bt=Button(text="Quit",fg="red",background="blue",command=bye)
+                T = Text(root, height=10, width=100,background="yellow",font=('Verdana', 12, 'italic'))
+                bt=Button(text="Quit",background="red",command=bye)
+                
                 bt.pack()
-                bt1=Button(root,text="continue playing",fg="blue",command=root.quit)
+                bt1=Button(root,text="continue playing",fg="blue",background="green",command=zombify)
                 bt1.pack()
                 T.tag_configure('bold_italics', 
                    font=('Verdana', 12, 'bold', 'italic'))
@@ -209,27 +222,28 @@ def zombify():
                 T.pack(side=LEFT, fill=Y)
                 S.config(command=T.yview)
                 T.config(yscrollcommand=S.set)
+                scale = Scale(root, from_=10, to=40,
+                    orient=VERTICAL)
+                scale.set(12)
+                scale.pack(fill=X, expand=1)
+
                 T.insert(END, out)
                 mainloop(  )
 
-                
-                print "\n"+str(out)+"\n"
             elif str(what)=='d':
                 out=dit(str(text),str(key),int(level))
                 root = Tk()
                 S = Scrollbar(root)
                 root.title("your decrpted text is")
-                T = Text(root, height=4, width=50,background="yellow")
-                bt=Button(text="Quit",fg="red",background="blue",command=bye)
+                T = Text(root, height=4, width=50,background="yellow",font=('Verdana', 12, 'bold', 'italic'))
+                bt=Button(text="Quit",fg="red",background="red",command=bye)
                 bt.pack()
-                bt1=Button(root,text="continue playing",fg="blue",command=root.quit)
+                bt1=Button(root,text="continue playing",fg="blue",command=zombify)
                 bt1.pack()
                 S.pack(side=RIGHT, fill=Y)
                 T.pack(side=LEFT, fill=Y)
                 S.config(command=T.yview)
                 T.config(yscrollcommand=S.set)
-                T.tag_configure('bold_italics', 
-                   font=('Verdana', 12, 'bold', 'italic'))
                 T.insert(END, out)
                 mainloop(  )
                 
